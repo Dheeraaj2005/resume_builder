@@ -92,11 +92,11 @@
 html,
 body {
   height: 100%;
-  font-family: var(--font-sans);
+  font-family: var(--font-sa);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.9;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
 }
