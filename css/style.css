@@ -86,17 +86,17 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
-  padding: 20;
+  padding: 30;
 }
 
 html,
 body {
-  height: 100%;
-  font-family: var(--font-sa);
+  height: 200%;
+  font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.9;
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
 }
@@ -124,7 +124,7 @@ body {
 .app-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 1000vh;
   width: 100vw;
   background: radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.06) 0%, transparent 40%),
