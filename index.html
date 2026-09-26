@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResumiQ — Professional AI-Ready Resume Builder & ATS Checker</title>
+  <meta name="description" content="Build modern, ATS-friendly, professional resumes in minutes with live real-time preview, multiple designer templates, custom color palettes, and instant PDF download.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- html2pdf.js CDN for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/templates.css">
+  <link rel="stylesheet" href="css/print.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app" class="app-layout">
+    
+    <!-- Top Navigation Bar -->
+    <header class="navbar" id="main-navbar">
+      <div class="nav-left">
+        <div class="brand">
+          <div class="brand-icon">
+            <i data-lucide="file-badge"></i>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Resumi<span class="gradient-text">Q</span></span>
+            <span class="brand-badge">Pro Studio</span>
+          </div>
+        </div>
+
+        <div class="save-status" id="save-status" title="Your progress is automatically saved locally">
+          <span class="status-dot"></span>
+          <span class="status-text">All changes saved</span>
+        </div>
+      </div>
+
+      <div class="nav-center">
+        <!-- Sample data presets -->
+        <div class="preset-dropdown-container">
+          <button class="btn btn-secondary btn-sm" id="btn-samples-menu" aria-haspopup="true">
+            <i data-lucide="sparkles"></i>
+            <span>Load Samples</span>
+            <i data-lucide="chevron-down" class="icon-sm"></i>
+          </button>
+          <div class="dropdown-menu" id="samples-dropdown">
+            <div class="dropdown-header">Quick Role Presets</div>
+            <button class="dropdown-item" data-sample="swe">
+              <i data-lucide="code-2"></i>
+              <div>
+                <strong>Senior Software Engineer</strong>
+                <small>Full Stack, Cloud, Tech Lead</small>
+              </div>
+            </button>
+            <button class="dropdown-item" data-sample="pm">
+              <i data-lucide="kanban"></i>
+              <div>
+                <strong>Product Manager</strong>
+                <small>Agile, Analytics, Roadmap</small>
+              </div>
+            </button>
+            <button class="dropdown-item" data-sample="designer">
+              <i data-lucide="palette"></i>
+              <div>
+                <strong>UI/UX Product Designer</strong>
+                <small>Design Systems, Research, Figma</small>
+              </div>
+            </button>
+            <button class="dropdown-item" data-sample="student">
+              <i data-lucide="graduation-cap"></i>
+              <div>
+                <strong>Student / New Graduate</strong>
+                <small>Internships, Projects, Education</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- ATS Score Button -->
+        <button class="btn btn-ghost btn-sm" id="btn-ats-toggle">
+          <i data-lucide="gauge"></i>
+          <span>ATS Score</span>
+          <span class="ats-pill" id="ats-score-badge">85%</span>
+        </button>
+      </div>
+
+      <div class="nav-right">
+        <!-- Theme Toggle -->
+        <button class="icon-btn" id="btn-theme-toggle" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+
+        <!-- Import / Export Menu -->
+        <div class="preset-dropdown-container">
+          <button class="btn btn-secondary btn-sm" id="btn-data-menu" title="Backup or restore data">
+            <i data-lucide="arrow-down-up"></i>
+            <span>Data</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" id="data-dropdown">
+            <button class="dropdown-item" id="btn-export-json">
+              <i data-lucide="download"></i>
+              <span>Export JSON Backup</span>
+            </button>
+            <label class="dropdown-item file-upload-label" for="json-file-input">
+              <i data-lucide="upload"></i>
+              <span>Import JSON Backup</span>
+              <input type="file" id="json-file-input" accept=".json" style="display: none;">
+            </label>
+            <button class="dropdown-item text-danger" id="btn-clear-data">
+              <i data-lucide="trash-2"></i>
+              <span>Reset to Blank</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Print / PDF Download -->
+        <button class="btn btn-primary" id="btn-download-pdf">
+          <i data-lucide="file-down"></i>
+          <span>Download PDF</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace (Editor + Live Preview) -->
+    <main class="workspace" id="main-workspace">
+      
+      <!-- LEFT: Editor Form Sidebar -->
+      <section class="editor-pane" id="editor-pane" aria-label="Resume Content Editor">
+        <div class="pane-header">
+          <div class="tabs-scroll-wrapper">
+            <nav class="editor-tabs" id="editor-tabs" role="tablist">
+              <button class="tab-btn active" data-tab="personal" role="tab" aria-selected="true">
+                <i data-lucide="user"></i>
+                <span>Personal</span>
+              </button>
+              <button class="tab-btn" data-tab="experience" role="tab" aria-selected="false">
+                <i data-lucide="briefcase"></i>
+                <span>Experience</span>
+                <span class="badge-count" id="count-experience">0</span>
+              </button>
+              <button class="tab-btn" data-tab="education" role="tab" aria-selected="false">
+                <i data-lucide="graduation-cap"></i>
+                <span>Education</span>
+                <span class="badge-count" id="count-education">0</span>
+              </button>
+              <button class="tab-btn" data-tab="skills" role="tab" aria-selected="false">
+                <i data-lucide="cpu"></i>
+                <span>Skills</span>
+                <span class="badge-count" id="count-skills">0</span>
+              </button>
+              <button class="tab-btn" data-tab="projects" role="tab" aria-selected="false">
+                <i data-lucide="folder-git-2"></i>
+                <span>Projects</span>
+                <span class="badge-count" id="count-projects">0</span>
+              </button>
+              <button class="tab-btn" data-tab="certifications" role="tab" aria-selected="false">
+                <i data-lucide="award"></i>
+                <span>Certificates</span>
+                <span class="badge-count" id="count-certifications">0</span>
+              </button>
+              <button class="tab-btn" data-tab="custom" role="tab" aria-selected="false">
+                <i data-lucide="layers"></i>
+                <span>Custom</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div class="pane-body">
+          
+          <!-- TAB 1: Personal Info -->
+          <div class="tab-content active" id="tab-personal">
+            <div class="section-card">
+              <div class="section-title-row">
+                <div class="section-title-icon"><i data-lucide="user-check"></i></div>
+                <div>
+                  <h2 class="section-title">Personal Details</h2>
+                  <p class="section-subtitle">Add your name, professional title, and contact methods.</p>
+                </div>
+              </div>
+
+              <!-- Photo Upload -->
+              <div class="photo-upload-row">
+                <div class="avatar-preview-box" id="avatar-preview-box">
+                  <img id="avatar-img-preview" src="" alt="Profile Preview" class="hidden">
+                  <div id="avatar-placeholder" class="avatar-placeholder">
+                    <i data-lucide="user"></i>
+                  </div>
+                </div>
+                <div class="avatar-controls">
+                  <label class="btn btn-secondary btn-sm" for="avatar-input">
+                    <i data-lucide="camera"></i> Upload Photo
+                  </label>
+                  <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                  <button class="btn btn-ghost btn-sm text-danger hidden" id="btn-remove-photo">
+                    <i data-lucide="x"></i> Remove
+                  </button>
+                  <div class="checkbox-row">
+                    <input type="checkbox" id="field-show-photo" checked>
+                    <label for="field-show-photo">Show photo on resume</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group col-6">
+                  <label for="field-full-name">Full Name <span class="required">*</span></label>
+                  <input type="text" id="field-full-name" placeholder="e.g. Alex Morgan" class="form-control">
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-job-title">Professional Title <span class="required">*</span></label>
+                  <input type="text" id="field-job-title" placeholder="e.g. Senior Full Stack Engineer" class="form-control">
+                </div>
+
+                <div class="form-group col-6">
+                  <label for="field-email">Email Address <span class="required">*</span></label>
+                  <div class="input-with-icon">
+                    <i data-lucide="mail"></i>
+                    <input type="email" id="field-email" placeholder="alex.morgan@example.com" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-phone">Phone Number</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="phone"></i>
+                    <input type="tel" id="field-phone" placeholder="+1 (555) 234-5678" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group col-6">
+                  <label for="field-location">Location (City, Country)</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="map-pin"></i>
+                    <input type="text" id="field-location" placeholder="San Francisco, CA" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-website">Portfolio / Website</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="globe"></i>
+                    <input type="url" id="field-website" placeholder="https://alexmorgan.dev" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group col-6">
+                  <label for="field-linkedin">LinkedIn Profile</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="linkedin"></i>
+                    <input type="text" id="field-linkedin" placeholder="linkedin.com/in/alexmorgan" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group col-6">
+                  <label for="field-github">GitHub / Profile</label>
+                  <div class="input-with-icon">
+                    <i data-lucide="github"></i>
+                    <input type="text" id="field-github" placeholder="github.com/alexmorgan" class="form-control">
+                  </div>
+                </div>
+
+                <div class="form-group col-12">
+                  <div class="label-with-action">
+                    <label for="field-summary">Professional Summary / Bio</label>
+                    <button class="btn-text-action" id="btn-suggest-summary">
+                      <i data-lucide="sparkles"></i> AI Summary Helper
+                    </button>
+                  </div>
+                  <textarea id="field-summary" rows="4" class="form-control" placeholder="Results-driven engineer with 6+ years of experience in building high-throughput microservices, scalable distributed systems, and leading cross-functional engineering teams..."></textarea>
+                  <div class="field-hint">Tip: Highlight 2-3 key achievements, years of experience, and your core technical strengths.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Work Experience -->
+          <div class="tab-content" id="tab-experience">
+            <div class="section-card">
+              <div class="section-title-row between">
+                <div class="d-flex align-center gap-3">
+                  <div class="section-title-icon"><i data-lucide="briefcase"></i></div>
+                  <div>
+                    <h2 class="section-title">Work Experience</h2>
+                    <p class="section-subtitle">Showcase your professional background, roles, and quantifiable impact.</p>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btn-add-experience">
+                  <i data-lucide="plus"></i> Add Job
+                </button>
+              </div>
+
+              <!-- Action verbs helper bar -->
+              <div class="action-verbs-bar">
+                <span class="action-verbs-title"><i data-lucide="zap"></i> Power Action Verbs:</span>
+                <div class="verbs-chips">
+                  <button type="button" class="verb-chip" data-verb="Architected">Architected</button>
+                  <button type="button" class="verb-chip" data-verb="Spearheaded">Spearheaded</button>
+                  <button type="button" class="verb-chip" data-verb="Accelerated">Accelerated</button>
+                  <button type="button" class="verb-chip" data-verb="Optimized">Optimized</button>
+                  <button type="button" class="verb-chip" data-verb="Engineered">Engineered</button>
+                  <button type="button" class="verb-chip" data-verb="Orchestrated">Orchestrated</button>
+                  <button type="button" class="verb-chip" data-verb="Boosted">Boosted</button>
+                  <button type="button" class="verb-chip" data-verb="Reduced">Reduced</button>
+                </div>
+              </div>
+
+              <!-- Experience Items Container -->
+              <div id="experience-list" class="dynamic-items-container">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Education -->
+          <div class="tab-content" id="tab-education">
+            <div class="section-card">
+              <div class="section-title-row between">
+                <div class="d-flex align-center gap-3">
+                  <div class="section-title-icon"><i data-lucide="graduation-cap"></i></div>
+                  <div>
+                    <h2 class="section-title">Education & Qualifications</h2>
+                    <p class="section-subtitle">Degrees, diplomas, university, GPA, and major coursework.</p>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btn-add-education">
+                  <i data-lucide="plus"></i> Add Education
+                </button>
+              </div>
+
+              <div id="education-list" class="dynamic-items-container">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: Skills -->
+          <div class="tab-content" id="tab-skills">
+            <div class="section-card">
+              <div class="section-title-row">
+                <div class="section-title-icon"><i data-lucide="cpu"></i></div>
+                <div>
+                  <h2 class="section-title">Skills & Technologies</h2>
+                  <p class="section-subtitle">Categorize your technical proficiencies, frameworks, tools, and languages.</p>
+                </div>
+              </div>
+
+              <!-- Skill Categories -->
+              <div class="skills-categories-grid">
+                
+                <!-- Category 1: Technical / Core Skills -->
+                <div class="skill-category-block">
+                  <div class="cat-header">
+                    <i data-lucide="code"></i>
+                    <h4>Technical & Core Skills</h4>
+                  </div>
+                  <div class="quick-suggest-pills" id="suggest-tech-skills">
+                    <span class="sugg-pill" data-cat="technical">+ JavaScript</span>
+                    <span class="sugg-pill" data-cat="technical">+ TypeScript</span>
+                    <span class="sugg-pill" data-cat="technical">+ React.js</span>
+                    <span class="sugg-pill" data-cat="technical">+ Node.js</span>
+                    <span class="sugg-pill" data-cat="technical">+ Python</span>
+                    <span class="sugg-pill" data-cat="technical">+ Next.js</span>
+                    <span class="sugg-pill" data-cat="technical">+ SQL / PostgreSQL</span>
+                    <span class="sugg-pill" data-cat="technical">+ GraphQL</span>
+                  </div>
+                  <div class="tag-input-wrapper" id="tag-input-tech">
+                    <div class="tags-container" id="tags-technical"></div>
+                    <input type="text" class="tag-input" id="input-skill-technical" placeholder="Type skill & press Enter...">
+                  </div>
+                </div>
+
+                <!-- Category 2: Tools & DevOps / Cloud -->
+                <div class="skill-category-block">
+                  <div class="cat-header">
+                    <i data-lucide="cloud"></i>
+                    <h4>Tools, Cloud & DevOps</h4>
+                  </div>
+                  <div class="quick-suggest-pills" id="suggest-tools-skills">
+                    <span class="sugg-pill" data-cat="tools">+ AWS</span>
+                    <span class="sugg-pill" data-cat="tools">+ Docker</span>
+                    <span class="sugg-pill" data-cat="tools">+ Kubernetes</span>
+                    <span class="sugg-pill" data-cat="tools">+ Git / GitHub</span>
+                    <span class="sugg-pill" data-cat="tools">+ CI/CD Pipelines</span>
+                    <span class="sugg-pill" data-cat="tools">+ Linux</span>
+                    <span class="sugg-pill" data-cat="tools">+ Terraform</span>
+                  </div>
+                  <div class="tag-input-wrapper" id="tag-input-tools">
+                    <div class="tags-container" id="tags-tools"></div>
+                    <input type="text" class="tag-input" id="input-skill-tools" placeholder="Type tool & press Enter...">
+                  </div>
+                </div>
+
+                <!-- Category 3: Soft Skills & Methodologies -->
+                <div class="skill-category-block">
+                  <div class="cat-header">
+                    <i data-lucide="users"></i>
+                    <h4>Soft Skills & Leadership</h4>
+                  </div>
+                  <div class="quick-suggest-pills" id="suggest-soft-skills">
+                    <span class="sugg-pill" data-cat="soft">+ Agile / Scrum</span>
+                    <span class="sugg-pill" data-cat="soft">+ Team Mentorship</span>
+                    <span class="sugg-pill" data-cat="soft">+ Cross-functional Leadership</span>
+                    <span class="sugg-pill" data-cat="soft">+ Problem Solving</span>
+                    <span class="sugg-pill" data-cat="soft">+ Stakeholder Management</span>
+                  </div>
+                  <div class="tag-input-wrapper" id="tag-input-soft">
+                    <div class="tags-container" id="tags-soft"></div>
+                    <input type="text" class="tag-input" id="input-skill-soft" placeholder="Type skill & press Enter...">
+                  </div>
+                </div>
+
+                <!-- Category 4: Languages -->
+                <div class="skill-category-block">
+                  <div class="cat-header">
+                    <i data-lucide="languages"></i>
+                    <h4>Languages & Proficiency</h4>
+                  </div>
+                  <div class="quick-suggest-pills" id="suggest-lang-skills">
+                    <span class="sugg-pill" data-cat="languages">+ English (Native)</span>
+                    <span class="sugg-pill" data-cat="languages">+ Spanish (Fluent)</span>
+                    <span class="sugg-pill" data-cat="languages">+ German (Conversational)</span>
+                    <span class="sugg-pill" data-cat="languages">+ French (Basic)</span>
+                  </div>
+                  <div class="tag-input-wrapper" id="tag-input-languages">
+                    <div class="tags-container" id="tags-languages"></div>
+                    <input type="text" class="tag-input" id="input-skill-languages" placeholder="e.g. English (Fluent) & press Enter...">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: Projects -->
+          <div class="tab-content" id="tab-projects">
+            <div class="section-card">
+              <div class="section-title-row between">
+                <div class="d-flex align-center gap-3">
+                  <div class="section-title-icon"><i data-lucide="folder-git-2"></i></div>
+                  <div>
+                    <h2 class="section-title">Featured Projects</h2>
+                    <p class="section-subtitle">Showcase open-source apps, client work, or notable key projects.</p>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btn-add-project">
+                  <i data-lucide="plus"></i> Add Project
+                </button>
+              </div>
+
+              <div id="projects-list" class="dynamic-items-container">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 6: Certifications & Awards -->
+          <div class="tab-content" id="tab-certifications">
+            <div class="section-card">
+              <div class="section-title-row between">
+                <div class="d-flex align-center gap-3">
+                  <div class="section-title-icon"><i data-lucide="award"></i></div>
+                  <div>
+                    <h2 class="section-title">Certifications & Licenses</h2>
+                    <p class="section-subtitle">Industry credentials, AWS/Azure/Google certificates, and verified honors.</p>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btn-add-certification">
+                  <i data-lucide="plus"></i> Add Certificate
+                </button>
+              </div>
+
+              <div id="certifications-list" class="dynamic-items-container">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 7: Custom Section -->
+          <div class="tab-content" id="tab-custom">
+            <div class="section-card">
+              <div class="section-title-row">
+                <div class="section-title-icon"><i data-lucide="layers"></i></div>
+                <div>
+                  <h2 class="section-title">Custom Section / Extra Details</h2>
+                  <p class="section-subtitle">Add custom sections such as Publications, Volunteering, or References.</p>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group col-12">
+                  <div class="checkbox-row">
+                    <input type="checkbox" id="field-custom-enable">
+                    <label for="field-custom-enable"><strong>Enable Custom Section on Resume</strong></label>
+                  </div>
+                </div>
+                <div class="form-group col-12">
+                  <label for="field-custom-title">Section Title</label>
+                  <input type="text" id="field-custom-title" placeholder="e.g. Publications & Patents / Volunteer Work" class="form-control">
+                </div>
+                <div class="form-group col-12">
+                  <label for="field-custom-content">Section Content (Supports bullet points or paragraphs)</label>
+                  <textarea id="field-custom-content" rows="5" class="form-control" placeholder="• Published 'Optimizing Distributed Cache Architecture' in IEEE Software 2024&#10;• Keynote Speaker at DevConf Global 2023 on Web Performance"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT: Live Resume Preview + Style Controls -->
+      <section class="preview-pane" id="preview-pane" aria-label="Resume Live Preview">
+        
+        <!-- Live Customization Bar -->
+        <div class="customizer-bar" id="customizer-bar">
+          
+          <!-- Template Picker -->
+          <div class="custom-group">
+            <label class="custom-label"><i data-lucide="layout-template"></i> Template</label>
+            <div class="template-selector-pills" id="template-selector">
+              <button class="tpl-pill active" data-template="modern">
+                <span>Modern Minimal</span>
+              </button>
+              <button class="tpl-pill" data-template="executive">
+                <span>Executive Navy</span>
+              </button>
+              <button class="tpl-pill" data-template="split">
+                <span>Creative Split</span>
+              </button>
+              <button class="tpl-pill" data-template="compact">
+                <span>ATS Compact</span>
+              </button>
+              <button class="tpl-pill" data-template="emerald">
+                <span>Emerald Elite</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Color Palette Picker -->
+          <div class="custom-group">
+            <label class="custom-label"><i data-lucide="pipette"></i> Color Accent</label>
+            <div class="color-palette-picker" id="color-palette">
+              <button class="color-dot active" style="--c: #2563eb;" data-color="#2563eb" title="Royal Blue"></button>
+              <button class="color-dot" style="--c: #059669;" data-color="#059669" title="Emerald Green"></button>
+              <button class="color-dot" style="--c: #0284c7;" data-color="#0284c7" title="Sky Blue"></button>
+              <button class="color-dot" style="--c: #7c3aed;" data-color="#7c3aed" title="Purple Violet"></button>
+              <button class="color-dot" style="--c: #e11d48;" data-color="#e11d48" title="Crimson Red"></button>
+              <button class="color-dot" style="--c: #d97706;" data-color="#d97706" title="Amber Gold"></button>
+              <button class="color-dot" style="--c: #0f172a;" data-color="#0f172a" title="Midnight Slate"></button>
+              <div class="custom-color-input-wrapper" title="Pick any custom color">
+                <input type="color" id="custom-color-picker" value="#2563eb">
+                <i data-lucide="plus" class="color-plus-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typography & Spacing -->
+          <div class="custom-group-row">
+            <div class="custom-group">
+              <label class="custom-label" for="font-family-select"><i data-lucide="type"></i> Typography</label>
+              <select id="font-family-select" class="form-select form-select-sm">
+                <option value="Inter">Inter (Clean Modern)</option>
+                <option value="'Outfit', sans-serif">Outfit (Contemporary)</option>
+                <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Corporate)</option>
+                <option value="'Merriweather', serif">Merriweather (Classic Serif)</option>
+                <option value="'JetBrains Mono', monospace">JetBrains Mono (Tech/Dev)</option>
+              </select>
+            </div>
+
+            <div class="custom-group">
+              <label class="custom-label" for="density-select"><i data-lucide="align-justify"></i> Density</label>
+              <select id="density-select" class="form-select form-select-sm">
+                <option value="compact">Compact (Fit 1 Page)</option>
+                <option value="normal" selected>Normal (Standard)</option>
+                <option value="spacious">Spacious</option>
+              </select>
+            </div>
+
+            <div class="custom-group">
+              <label class="custom-label"><i data-lucide="zoom-in"></i> Zoom</label>
+              <div class="zoom-controls">
+                <button class="zoom-btn" id="btn-zoom-out" title="Zoom Out"><i data-lucide="minus"></i></button>
+                <span class="zoom-value" id="zoom-value">100%</span>
+                <button class="zoom-btn" id="btn-zoom-in" title="Zoom In"><i data-lucide="plus"></i></button>
+                <button class="zoom-btn" id="btn-zoom-fit" title="Fit to Screen"><i data-lucide="maximize-2"></i></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Canvas Area where A4 paper is rendered -->
+        <div class="resume-canvas-viewport" id="resume-viewport">
+          <div class="resume-paper-wrapper" id="resume-paper-wrapper">
+            
+            <!-- Target A4 Paper Container for live rendering & PDF capture -->
+            <div class="resume-paper template-modern" id="resume-preview-document">
+              <!-- Rendered via JavaScript template engine -->
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- ATS Score & Optimizer Modal / Drawer -->
+    <div class="modal-backdrop hidden" id="ats-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="d-flex align-center gap-2">
+            <div class="ats-modal-icon"><i data-lucide="shield-check"></i></div>
+            <div>
+              <h3 class="modal-title">ATS Resume Health & Optimizer</h3>
+              <p class="modal-subtitle">Real-time scan against Applicant Tracking System criteria</p>
+            </div>
+          </div>
+          <button class="icon-btn" id="btn-close-ats" aria-label="Close modal"><i data-lucide="x"></i></button>
+        </div>
+        <div class="modal-body" id="ats-modal-body">
+          <!-- Dynamic ATS Content -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary AI Assistant Modal -->
+    <div class="modal-backdrop hidden" id="summary-helper-modal">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <div class="d-flex align-center gap-2">
+            <div class="ats-modal-icon"><i data-lucide="sparkles"></i></div>
+            <div>
+              <h3 class="modal-title">AI Summary & Bio Generator</h3>
+              <p class="modal-subtitle">Choose a pre-crafted high-impact template or customize tailored to your role</p>
+            </div>
+          </div>
+          <button class="icon-btn" id="btn-close-summary-modal" aria-label="Close modal"><i data-lucide="x"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="summary-presets-grid" id="summary-presets-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toast-container"></div>
+
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/sample-data.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/ats-analyzer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

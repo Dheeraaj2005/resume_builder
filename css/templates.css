@@ -1,0 +1,459 @@
+/* ==========================================================================
+   ResumiQ - Resume Templates Styling Engine
+   ========================================================================== */
+
+/* Shared Resume Typography & Elements */
+.resume-paper {
+  color: #1e293b;
+  font-size: 9.5pt;
+  line-height: 1.45;
+}
+
+.resume-paper h1, 
+.resume-paper h2, 
+.resume-paper h3, 
+.resume-paper h4 {
+  color: #0f172a;
+  margin: 0;
+}
+
+.resume-paper a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Density Settings */
+.density-compact .resume-paper {
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding: 14mm 16mm;
+}
+.density-compact .resume-section {
+  margin-bottom: 3.5mm;
+}
+.density-compact .resume-entry {
+  margin-bottom: 2mm;
+}
+
+.density-spacious .resume-paper {
+  font-size: 10pt;
+  line-height: 1.6;
+  padding: 22mm 24mm;
+}
+.density-spacious .resume-section {
+  margin-bottom: 7mm;
+}
+.density-spacious .resume-entry {
+  margin-bottom: 4mm;
+}
+
+/* Generic Entry Row */
+.resume-entry {
+  margin-bottom: 3mm;
+}
+.resume-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1mm;
+}
+.resume-entry-title {
+  font-weight: 700;
+  font-size: 10pt;
+  color: #0f172a;
+}
+.resume-entry-subtitle {
+  font-weight: 600;
+  color: #475569;
+  font-size: 9pt;
+}
+.resume-entry-date {
+  font-size: 8.5pt;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.resume-entry-location {
+  font-size: 8.5pt;
+  color: #64748b;
+}
+
+.resume-bullets {
+  margin: 1.5mm 0 0 4mm;
+  padding: 0;
+  list-style-type: disc;
+}
+.resume-bullets li {
+  margin-bottom: 1mm;
+  color: #334155;
+}
+
+.resume-skill-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5mm;
+  margin-top: 1.5mm;
+}
+.resume-skill-pill {
+  background: #f1f5f9;
+  color: #334155;
+  padding: 1mm 2.5mm;
+  border-radius: 3px;
+  font-size: 8pt;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+}
+
+/* ==========================================================================
+   TEMPLATE 1: Modern Minimal (Default)
+   ========================================================================== */
+.template-modern .cv-header {
+  border-bottom: 2px solid var(--resume-accent);
+  padding-bottom: 4mm;
+  margin-bottom: 5mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+.template-modern .cv-header-text {
+  flex: 1;
+}
+
+.template-modern .cv-name {
+  font-size: 20pt;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+  line-height: 1.1;
+  margin-bottom: 1.5mm;
+}
+
+.template-modern .cv-jobtitle {
+  font-size: 11pt;
+  font-weight: 600;
+  color: var(--resume-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2.5mm;
+}
+
+.template-modern .cv-contact-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3mm 4.5mm;
+  font-size: 8.5pt;
+  color: #475569;
+}
+.template-modern .cv-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+}
+
+.template-modern .cv-avatar {
+  width: 24mm;
+  height: 24mm;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--resume-accent);
+}
+
+.template-modern .resume-section {
+  margin-bottom: 5mm;
+}
+
+.template-modern .section-heading {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2.5mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+.template-modern .section-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+/* ==========================================================================
+   TEMPLATE 2: Executive Navy / Corporate Serif
+   ========================================================================== */
+.template-executive {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.template-executive .cv-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  padding: 10mm 18mm;
+  margin-bottom: 6mm;
+  border-bottom: 4px solid var(--resume-accent);
+}
+
+.template-executive .cv-banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.template-executive .cv-name {
+  font-size: 22pt;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin-bottom: 1mm;
+}
+
+.template-executive .cv-jobtitle {
+  font-size: 11pt;
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3mm;
+}
+
+.template-executive .cv-contact-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5mm 4mm;
+  font-size: 8.5pt;
+  color: #cbd5e1;
+}
+
+.template-executive .cv-avatar {
+  width: 22mm;
+  height: 22mm;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+}
+
+.template-executive .cv-body-content {
+  padding: 0 18mm 16mm;
+}
+
+.template-executive .section-heading {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 1.5px solid var(--resume-accent);
+  padding-bottom: 1mm;
+  margin-bottom: 3mm;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.template-executive .resume-section {
+  margin-bottom: 5mm;
+}
+
+/* ==========================================================================
+   TEMPLATE 3: Creative Split (Two-Column Layout)
+   ========================================================================== */
+.template-split {
+  padding: 0 !important;
+  display: flex;
+}
+
+.template-split .split-sidebar {
+  width: 32%;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 16mm 7mm 16mm 9mm;
+  display: flex;
+  flex-direction: column;
+  gap: 5mm;
+}
+
+.template-split .split-sidebar .cv-avatar {
+  width: 26mm;
+  height: 26mm;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 3mm;
+  display: block;
+  border: 3px solid var(--resume-accent);
+}
+
+.template-split .sidebar-section-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: var(--resume-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1.5px solid var(--resume-accent);
+  padding-bottom: 1mm;
+  margin-bottom: 2mm;
+}
+
+.template-split .sidebar-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 2mm;
+  font-size: 8pt;
+  color: #475569;
+  margin-bottom: 2mm;
+  word-break: break-word;
+}
+
+.template-split .split-main {
+  width: 68%;
+  padding: 16mm 10mm 16mm 9mm;
+  display: flex;
+  flex-direction: column;
+  gap: 5mm;
+}
+
+.template-split .cv-name {
+  font-size: 20pt;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.template-split .cv-jobtitle {
+  font-size: 11pt;
+  font-weight: 600;
+  color: var(--resume-accent);
+  margin-bottom: 2mm;
+}
+
+.template-split .main-section-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 1mm;
+  margin-bottom: 3mm;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   TEMPLATE 4: ATS Compact Minimalist
+   ========================================================================== */
+.template-compact {
+  padding: 16mm 18mm;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.template-compact .cv-header {
+  text-align: center;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 3mm;
+  margin-bottom: 4mm;
+}
+
+.template-compact .cv-name {
+  font-size: 18pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1mm;
+}
+
+.template-compact .cv-jobtitle {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 1.5mm;
+}
+
+.template-compact .cv-contact-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5mm 3.5mm;
+  font-size: 8.5pt;
+}
+
+.template-compact .section-heading {
+  font-size: 10.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #64748b;
+  padding-bottom: 0.5mm;
+  margin-bottom: 2mm;
+  color: #0f172a;
+}
+
+.template-compact .resume-section {
+  margin-bottom: 3.5mm;
+}
+
+/* ==========================================================================
+   TEMPLATE 5: Emerald Elite
+   ========================================================================== */
+.template-emerald .cv-header {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 6px solid var(--resume-accent);
+  padding: 5mm 6mm;
+  border-radius: 4px;
+  margin-bottom: 5mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.template-emerald .cv-name {
+  font-size: 20pt;
+  font-weight: 800;
+  color: #064e3b;
+  margin-bottom: 1mm;
+}
+
+.template-emerald .cv-jobtitle {
+  font-size: 10.5pt;
+  font-weight: 600;
+  color: var(--resume-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2mm;
+}
+
+.template-emerald .cv-contact-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5mm 4mm;
+  font-size: 8.5pt;
+  color: #065f46;
+}
+
+.template-emerald .section-heading {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #064e3b;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  margin-bottom: 3mm;
+}
+.template-emerald .section-heading::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--resume-accent);
+  border-radius: 2px;
+}
+.template-emerald .section-heading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #bbf7d0;
+}
+
+.template-emerald .resume-skill-pill {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}

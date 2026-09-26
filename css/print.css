@@ -1,0 +1,81 @@
+/* ==========================================================================
+   ResumiQ - Pixel-Perfect Print & PDF Media Stylesheet
+   ========================================================================== */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html, body {
+    width: 210mm;
+    height: auto !important;
+    min-height: 297mm;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #1e293b !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide entire UI except the resume paper */
+  .navbar,
+  .editor-pane,
+  .customizer-bar,
+  .modal-backdrop,
+  .toast-container,
+  .no-print {
+    display: none !important;
+  }
+
+  .app-layout,
+  .workspace,
+  .preview-pane,
+  .resume-canvas-viewport,
+  .resume-paper-wrapper {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+    transform: none !important;
+  }
+
+  .resume-paper {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 18mm !important;
+    box-sizing: border-box !important;
+    background-color: #ffffff !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .template-executive {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .template-split {
+    padding: 0 !important;
+  }
+
+  /* Prevent page breaks inside entries */
+  .resume-entry,
+  .resume-section,
+  .cv-header,
+  .cv-banner {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}

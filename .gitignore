@@ -1,0 +1,54 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# IDE / Editor Files
+.idea/
+*.sublime-workspace
+*.sublime-project
+.project
+.settings/
+
+# VS Code (keep configuration, ignore local state)
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+*.code-workspace
+
+# Node / Package Manager dependencies (if used in future)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+
+# Build & Output directories
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+# Temporary files & Logs
+logs/
+*.log
+*.tmp
+*.bak
+*.swp
+*~
